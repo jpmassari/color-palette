@@ -52,7 +52,7 @@ const ColorPalette: React.FC = () => {
       </div>
       <div className='flex justify-center mb-4'>
         {PALETTE.map((color, i) => (
-          <ColorSlot color={color} index={i} onClick={(value) => handlePaletteClick(value)} colorPreview={(value) => handleColorPreview(value)}/>
+          <ColorSlot key={i} color={color} index={i} onClick={(value) => handlePaletteClick(value)} colorPreview={(value) => handleColorPreview(value)}/>
         ))}
       </div>
       <div className=''>
