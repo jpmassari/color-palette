@@ -11,7 +11,6 @@ export const useColorPalette = (palette: string[]) => {
 
   const handlePaletteClick = (color: string) => {
     setSelectedColor(color);
-    setInputColor("");
   };
   const handleColorPreview = (color: string) => {
     setPreviewColor(color)
@@ -24,7 +23,7 @@ export const useColorPalette = (palette: string[]) => {
       event.preventDefault();
       if(inputValue) {     
         return (/^#[0-9A-F]{0,6}$/i.test(inputValue) && inputValue.length == 7 && !paletteColors.find(color => color == inputValue)
-          ? setPaletteColors([...paletteColors, inputValue]) 
+          ? (setPaletteColors([...paletteColors, inputValue]), setInputColor(""), setSelectedColor(inputValue))
           : setError("Insert a valid color code")
         )
       }

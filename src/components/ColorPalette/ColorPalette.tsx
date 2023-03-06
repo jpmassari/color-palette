@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ColorSlot from './ColorSlot/ColorSlot'
+import ColorDisplay from './ColorDisplay/ColorDisplay';
 import { useColorPalette } from '../../hooks/useColorPalette'
 
 const PALETTE: string[] = [
@@ -41,15 +42,8 @@ const ColorPalette: React.FC = () => {
 
   return (
     <div className='flex flex-wrap flex-col items-center justify-center pt-16'>
-      <div
-        className='w-24 h-24 mb-4 border border-black'
-        style={{ backgroundColor: previewColor || selectedColor }}
-      />
-      <div className='mb-2'>
-        Selected color:
-        <code className='ml-1'>{previewColor || selectedColor}</code>
-      </div>
-      <div className='flex justify-center mb-4'>
+      <ColorDisplay previewColor={previewColor} selectedColor={selectedColor} />
+      <div className='flex flex-wrap mb-4'>
         {paletteColors.map((color, i) => (
           <ColorSlot key={i} color={color} index={i} onClick={(value) => handlePaletteClick(value)} colorPreview={(value) => handleColorPreview(value)}/>
         ))}
