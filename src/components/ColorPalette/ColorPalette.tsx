@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ColorSlot from './ColorSlot/ColorSlot'
+import { useColorPalette } from '../../hooks/useColorPalette'
 
-type Color = string;
-
-const PALETTE: Color[] = [
+const PALETTE: string[] = [
   '#FF0000',
   '#00FF00',
   '#0000FF',
@@ -28,17 +27,17 @@ const PALETTE: Color[] = [
 ];
 
 const ColorPalette: React.FC = () => {
-  const [ previewColor, setPreviewColor ] = useState<Color>("")
-  const [ selectedColor, setSelectedColor ] = useState<Color>("#ffffff");
-  const [ inputColor, setInputColor ] = useState<Color>("");
 
-  const handlePaletteClick = (color: Color) => {
-    setSelectedColor(color);
-    setInputColor("");
-  };
-  const handleColorPreview = (color: Color) => {
-    setPreviewColor(color)
-  };
+  const { 
+    previewColor, 
+    selectedColor,
+    inputColor, 
+    paletteColors, 
+    error, 
+    handlePaletteClick, 
+    handleColorPreview, 
+    handleInputValidation 
+  } = useColorPalette(PALETTE);
 
   return (
     <div className='flex flex-wrap flex-col items-center justify-center pt-16'>
@@ -51,18 +50,27 @@ const ColorPalette: React.FC = () => {
         <code className='ml-1'>{previewColor || selectedColor}</code>
       </div>
       <div className='flex justify-center mb-4'>
-        {PALETTE.map((color, i) => (
+        {paletteColors.map((color, i) => (
           <ColorSlot key={i} color={color} index={i} onClick={(value) => handlePaletteClick(value)} colorPreview={(value) => handleColorPreview(value)}/>
         ))}
       </div>
       <div className=''>
         <label htmlFor='color-input' className='font-medium'>Enter hexadecimal color:</label>
-        <input
-          id='color-input'
-          type='text'
-          className='p-1 ml-2 text-gray-800 border font-normal'
-        />
+        <form 
+          // @ts-ignore
+          onSubmit={handleInputValidation(inputColor)}
+        >
+          <input
+            id='color-input'
+            type='text'
+            className='p-1 ml-2 text-gray-800 border font-normal'
+            value={inputColor}
+            // @ts-ignore
+            onChange={handleInputValidation()}
+          />
+        </form>
       </div>
+      {error && <div className="text-red-500">{error}</div>}
     </div>
   );
 };
