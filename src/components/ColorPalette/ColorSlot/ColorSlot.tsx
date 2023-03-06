@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 interface IColorSlot {
   index: number,
@@ -12,15 +12,21 @@ const ColorSlot: React.FC<IColorSlot> = ({
   color, 
   onClick = () => null,
   colorPreview = () => null,
-}) => (
-  <div
-    key={color}
-    className='w-4 h-4 cursor-pointer hover:translate-y-[1px] duration-100 ease-in-out'
-    style={{ backgroundColor: color }}
-    onClick={() => onClick(color)}
-    onMouseOver={() => colorPreview(color)}
-    onMouseOut={() => colorPreview("") }
-  />
-)
+}) => {
 
-export default ColorSlot
+  return (
+    <div
+      className='w-4 h-4 cursor-pointer hover:translate-y-[1px] duration-100 ease-in-out'
+      style={{ backgroundColor: color }}
+      onClick={() => onClick(color)}
+      onMouseOver={() => colorPreview(color)}
+      onMouseOut={() => colorPreview("") }
+    />
+  )
+}
+
+const arePropsEqual = (oldProps: IColorSlot, newProps:IColorSlot) => {
+  return (oldProps.color == newProps.color ? true : false)
+}
+
+export default memo(ColorSlot, arePropsEqual)
