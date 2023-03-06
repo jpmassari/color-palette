@@ -12,8 +12,7 @@ const ColorSlot: React.FC<IColorSlot> = ({
   color, 
   onClick = () => null,
   colorPreview = () => null,
-}) => {
-  return (
+}) => (
   <div
     className='w-4 h-4 cursor-pointer hover:translate-y-[1px] duration-100 ease-in-out'
     style={{ backgroundColor: color }}
@@ -21,8 +20,7 @@ const ColorSlot: React.FC<IColorSlot> = ({
     onMouseOver={() => colorPreview(color)}
     onMouseOut={() => colorPreview("") }
   />
-  )
-}
+)
 const arePropsEqual = (oldProps: IColorSlot, newProps:IColorSlot) => {
   return oldProps.color == newProps.color ? true : false
 }

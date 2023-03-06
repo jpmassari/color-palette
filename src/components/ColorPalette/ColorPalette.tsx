@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ColorSlot from './ColorSlot/ColorSlot'
+import { useColorPalette } from '../../hooks/useColorPalette'
 
-type Color = string;
-
-const PALETTE: Color[] = [
+const PALETTE: string[] = [
   '#FF0000',
   '#00FF00',
   '#0000FF',
@@ -28,44 +27,18 @@ const PALETTE: Color[] = [
 ];
 
 const ColorPalette: React.FC = () => {
-  const [ previewColor, setPreviewColor ] = useState<Color>("")
-  const [ selectedColor, setSelectedColor ] = useState<Color>("#ffffff");
-  const [ inputColor, setInputColor ] = useState<Color>("");
-  const [ paletteColors, setPaletteColors ] = useState<Color[]>(PALETTE)
-  const [error, setError] = useState<string | null>(null);
 
-  const handlePaletteClick = (color: Color) => {
-    setSelectedColor(color);
-    setInputColor("");
-  };
-  const handleColorPreview = (color: Color) => {
-    setPreviewColor(color)
-  };
+  const { 
+    previewColor, 
+    selectedColor,
+    inputColor, 
+    paletteColors, 
+    error, 
+    handlePaletteClick, 
+    handleColorPreview, 
+    handleInputValidation 
+  } = useColorPalette(PALETTE);
 
-  type InputValidationFn = (test?: string) => ((event: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => void) | void;
-
-  const handleInputValidation: InputValidationFn = (inputValue?: string) => {
-    return (event: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
-      event.preventDefault();
-      if(inputValue) {     
-        return (/^#[0-9A-F]{0,6}$/i.test(inputValue) && inputValue.length == 7 && !paletteColors.find(color => color == inputValue)
-          ? setPaletteColors([...paletteColors, inputValue]) 
-          : setError("Insert a valid color code")
-        )
-      }
-      const input = event.target.value.trim().toUpperCase();
-      if (input === "") {
-        setInputColor("");
-        setError(null);
-      } else if (!/^#[0-9A-F]{0,6}$/i.test(input)) {
-        setError("Invalid color code");
-      } else {
-        setInputColor(input);
-        setError(null);
-        setSelectedColor(input);
-      }
-    }
-  };
   return (
     <div className='flex flex-wrap flex-col items-center justify-center pt-16'>
       <div
@@ -83,12 +56,16 @@ const ColorPalette: React.FC = () => {
       </div>
       <div className=''>
         <label htmlFor='color-input' className='font-medium'>Enter hexadecimal color:</label>
-        <form onSubmit={handleInputValidation(inputColor)}>
+        <form 
+          // @ts-ignore
+          onSubmit={handleInputValidation(inputColor)}
+        >
           <input
             id='color-input'
             type='text'
             className='p-1 ml-2 text-gray-800 border font-normal'
             value={inputColor}
+            // @ts-ignore
             onChange={handleInputValidation()}
           />
         </form>
