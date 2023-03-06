@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import ColorSlot from './ColorSlot/ColorSlot'
+
 type Color = string;
 
 const PALETTE: Color[] = [
@@ -26,16 +28,31 @@ const PALETTE: Color[] = [
 ];
 
 const ColorPalette: React.FC = () => {
+  const [ previewColor, setPreviewColor ] = useState<Color>("")
+  const [ selectedColor, setSelectedColor ] = useState<Color>("#ffffff");
+  const [ inputColor, setInputColor ] = useState<Color>("");
+
+  const handlePaletteClick = (color: Color) => {
+    setSelectedColor(color);
+    setInputColor("");
+  };
+  const handleColorPreview = (color: Color) => {
+    setPreviewColor(color)
+  };
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-wrap flex-col items-center justify-center pt-16'>
+      <div
+        className='w-24 h-24 mb-4 border border-black'
+        style={{ backgroundColor: previewColor || selectedColor }}
+      />
+      <div className='mb-2'>
+        Selected color:
+        <code className='ml-1'>{previewColor || selectedColor}</code>
+      </div>
       <div className='flex justify-center mb-4'>
-        {PALETTE.map((color) => (
-          <div
-            key={color}
-            style={{ backgroundColor: color }}
-            className='w-4 h-4 hover:-translate-y-1 duration-100 ease-in-out cursor-pointer'
-          />
+        {PALETTE.map((color, i) => (
+          <ColorSlot color={color} index={i} onClick={(value) => handlePaletteClick(value)} colorPreview={(value) => handleColorPreview(value)}/>
         ))}
       </div>
       <div className=''>
